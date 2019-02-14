@@ -5,8 +5,8 @@ PREFIX = /usr/local
 
 all: testcountry  testasn
 
-libftrie.a: ftrie.o  MaxmindCountryDB.o MaxmindASNDB.o
-	ar rcs $@ ftrie.o MaxmindASNDB.o MaxmindCountryDB.o
+libftrie.a: ftrie.o  MaxmindCountryDB.o MaxmindASNDB.o NewMaxmindDB.o 
+	ar rcs $@ ftrie.o MaxmindASNDB.o MaxmindCountryDB.o NewMaxmindDB.o 
 
 testcountry: testcountry.o  libftrie.a 
 	$(CC) -o $@ $^ $(LDFLAGS)
@@ -30,9 +30,11 @@ install: libftrie.a
 	cp libftrie.a $(DESTDIR)$(PREFIX)/lib/$(alib)
 	cp MaxmindASNDB.h $(DESTDIR)$(PREFIX)/include/
 	cp MaxmindCountryDB.h $(DESTDIR)$(PREFIX)/include/
+	cp NewMaxmindDB.h $(DESTDIR)$(PREFIX)/include/
 
 .PHONY: uninstall
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/lib/libftrie.a
 	rm -f $(DESTDIR)$(PREFIX)/include/MaxmindASNDB.h
 	rm -f $(DESTDIR)$(PREFIX)/include/MaxmindCountryDB.h
+	rm -f $(DESTDIR)$(PREFIX)/include/NewMaxmindDB.h

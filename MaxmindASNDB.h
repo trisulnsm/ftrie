@@ -1,10 +1,12 @@
 #pragma once
 
 #include "ftrie.h"
+#include "MDB.h"
+
 #include <map>
 using namespace std;
 
-class CMaxmindASNDB
+class CMaxmindASNDB : public CMDB
 {
 	using geonames_t= map<int, std::string>;
 
