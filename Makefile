@@ -3,7 +3,7 @@ CFLAGS  = -g -std=c++11 -fPIC -O2
 LDFLAGS = -lpthread -lre2 
 PREFIX = /usr/local
 
-all: testcountry  testasn
+all: testcountry  testasn testoldapi 
 
 libftrie.a: ftrie.o  MaxmindCountryDB.o MaxmindASNDB.o NewMaxmindDB.o 
 	ar rcs $@ ftrie.o MaxmindASNDB.o MaxmindCountryDB.o NewMaxmindDB.o 
@@ -14,13 +14,16 @@ testcountry: testcountry.o  libftrie.a
 testasn: testasn.o  libftrie.a
 	$(CC) -o $@ $^ $(LDFLAGS)
 
+testoldapi: testoldapi.o  libftrie.a
+	$(CC) -o $@ $^ $(LDFLAGS)
+
 %.o: %.cpp
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 .PHONY: clean 
 
 clean:
-	rm -f *.o *.a  testasn testcountry 
+	rm -f *.o *.a  testasn testcountry  testoldapi
 
 
 .PHONY: install
