@@ -1,8 +1,7 @@
 #include <cinttypes>
 #include <iostream>
 #include <fstream>
-#include <string>
-#include <re2/re2.h>
+#include <string.h>
 #include <errno.h>
 #include <stdexcept>
 #include <memory>
@@ -57,11 +56,10 @@ bool 	 CMaxmindCountryDB::LoadBlocks(const std::string&  csvfile)
 	} 
 
 	std::string line;
-	RE2   regex("(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)/(\\d+),(\\d+)" );
 	while (getline(file, line)) 
 	{
 		int a,b,c,d,e,geoname_id;
-		if (RE2::PartialMatch(line, regex, &a,&b,&c,&d,&e,&geoname_id)) {
+		if (sscanf(line.c_str(),"%d.%d.%d.%d/%d,%d", &a,&b,&c,&d,&e,&geoname_id)==6) {
 			uint32_t addr = (a<<24) | (b << 16) | (c << 8)  | d ;
 
 			bits32_t b(addr, e ) ;
@@ -86,11 +84,10 @@ bool 	 CMaxmindCountryDB::LoadMeta(const std::string&  csvfile)
 	} 
 
 	std::string line;
-	RE2   regex("(\\d+)" );
 	while (getline(file, line)) 
 	{
 		int geoname_id;
-		if (RE2::PartialMatch(line, regex, &geoname_id)) {
+		if (sscanf(line.c_str(),"%d", &geoname_id)==1) {
 			mpGeonames.insert(geonames_t::value_type(geoname_id,line));
 		}
 	}

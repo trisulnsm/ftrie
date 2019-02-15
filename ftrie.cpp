@@ -1,6 +1,5 @@
 #include "ftrie.h"
 #include <cassert>
-#include <re2/re2.h>
 
 static inline void printpos(uint8_t val)
 {
@@ -111,9 +110,9 @@ void 	ptreearray_node_4_t::insert(bits32_t::iterator &iter, uint32_t value)
 
 uint32_t ptreearray_node_4_t::longest_match(const char * ipstr)
 {
-	RE2   regex("(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)" );
 	int a,b,c,d;
-	if (RE2::PartialMatch(ipstr, regex, &a,&b,&c,&d)) {
+	if (sscanf(ipstr,"%d.%d.%d.%d", &a,&b,&c,&d)==4)
+	{
 		uint32_t addr = (a<<24) | (b << 16) | (c << 8)  | d ;
 		bits32_t b(addr, 32 ) ;
 		auto iter=b.new_iterator();
@@ -133,10 +132,10 @@ uint32_t 	ptreearray_node_4_t::longest_match(bits32_t::iterator &iter, uint32_t 
 		return vb3[pos3[p.second>>1]]->longest_match(iter,node_value);
 	}
 	else if (pos2[p.second>>2]!=0xff) {
-		return vb2[pos2[0x03&p.second]]->longest_match(iter,node_value);
+		return vb2[pos2[p.second>>2]]->longest_match(iter,node_value);
 	}
 	else if (pos1[p.second>>3]!=0xff) {
-		return vb1[pos1[0x01&p.second]]->longest_match(iter,node_value);
+		return vb1[pos1[p.second>>3]]->longest_match(iter,node_value);
 	}
 	else {
 		return node_value==NO_VALUE?parentval:node_value;

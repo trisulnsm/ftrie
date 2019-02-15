@@ -2,9 +2,8 @@
 #include "MaxmindASNDB.h"
 #include "MaxmindCountryDB.h"
 #include <string>
-#include <re2/re2.h>
-using namespace std;
 
+using namespace std;
 
 GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 {
@@ -13,9 +12,13 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 	if (pathstr.find( "Country-Blocks-IPv4.csv") != string::npos) 
 	{
 		// country db
-		std::string  namesdb(path);
-		RE2::GlobalReplace(&namesdb, "GeoLite2-Country-Blocks-IPv4.csv", "GeoLite2-Country-Locations-en.csv");
+		string namesdb(pathstr);
+		string toSearch("GeoLite2-Country-Blocks-IPv4.csv");
 
+		// Get the first occurrence
+		auto pos = namesdb.find(toSearch);
+		namesdb.replace(pos, toSearch.size(), string("GeoLite2-Country-Locations-en.csv"));
+			 
 		return (void *) new CMaxmindCountryDB ( pathstr, namesdb);
 	}
 	else if (pathstr.find( "ASN-Blocks-IPv4.csv") != string::npos) 
@@ -55,6 +58,5 @@ const char *    GeoIP_org_by_ipnum(GeoIP * GeoIP_Handle, uint32_t ipnum)
 {
 	CMaxmindASNDB  * pdb = (CMaxmindASNDB *) GeoIP_Handle;
 	return pdb->LookupFull(ipnum);
-
 
 }

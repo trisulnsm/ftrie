@@ -1,8 +1,8 @@
 // Test the old v2 API 
 #include <iostream>
 #include <vector>
+#include <stdexcept>
 #include "NewMaxmindDB.h"
-#include <re2/re2.h>
 
 
 using namespace std;
@@ -26,6 +26,8 @@ int main(int c, char ** v)
 void runtest(GeoIP * pdb) 
 {
 	vector<string>  testips{
+		"65.54.239.80",
+		"0x4136ef50"
 		"111.201.128.153",
 		"192.168.3.255",
 		"192.168.3.1",
@@ -44,10 +46,9 @@ void runtest(GeoIP * pdb)
 		"1.0.24.18",
 		"1.0.31.255"
 	};
-	RE2   regex("(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)" );
 	for (auto ip : testips) {
 		int a,b,c,d;
-		if (RE2::PartialMatch(ip, regex, &a,&b,&c,&d)) {
+		if (sscanf(ip.c_str(),"%d.%d.%d.%d", &a,&b,&c,&d)==4) {
 			uint32_t ipnum  = (a<<24) | (b << 16) | (c << 8)  | d ;
 			cout << "Matching IP " << ip << "  value = " 
 					<< GeoIP_country_code_by_ipnum(pdb, ipnum) << endl;

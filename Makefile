@@ -1,6 +1,6 @@
 CC      = g++
-CFLAGS  = -g -std=c++11 -fPIC -O2
-LDFLAGS = -lpthread -lre2 
+CFLAGS  = -g -std=c++11 -fPIC -O0
+LDFLAGS = -lpthread 
 PREFIX = /usr/local
 
 all: testcountry  testasn testoldapi 
