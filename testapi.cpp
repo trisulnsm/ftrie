@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <stdexcept>
-#include "NewMaxmindDB.h"
+#include "GeoAPI.h"
 
 
 using namespace std;
