@@ -62,6 +62,10 @@ bool 	 CMaxmindASNDB::LoadBlocks(const std::string&  csvfile)
 	while (getline(file, line)) 
 	{
 		int a,b,c,d,e,geoname_id;
+
+
+
+
 		if (sscanf(line.c_str(),"%d.%d.%d.%d/%d,%d", &a,&b,&c,&d,&e,&geoname_id)==6) {
 			uint32_t addr = (a<<24) | (b << 16) | (c << 8)  | d ;
 
@@ -70,6 +74,7 @@ bool 	 CMaxmindASNDB::LoadBlocks(const std::string&  csvfile)
 			sproot.insert(iter,geoname_id);
 			mpGeonames.insert(geonames_t::value_type(geoname_id,line));
 		}
+
 	}
 	file.close();
 }
