@@ -3,12 +3,12 @@ CFLAGS  = -g -std=c++11 -fPIC -O2
 LDFLAGS = -lpthread 
 PREFIX = /usr/local
 
-all: testoldapi 
+all: testapi 
 
 libftrie.a: ftrie.o  GeoAPI.o  GeoDB.o
 	ar rcs $@ ftrie.o GeoAPI.o  GeoDB.o
 
-testoldapi: testoldapi.o  libftrie.a
+testapi: testapi.o  libftrie.a
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 %.o: %.cpp
@@ -17,7 +17,7 @@ testoldapi: testoldapi.o  libftrie.a
 .PHONY: clean 
 
 clean:
-	rm -f *.o *.a  testoldapi
+	rm -f *.o *.a  testapi
 
 
 .PHONY: install
