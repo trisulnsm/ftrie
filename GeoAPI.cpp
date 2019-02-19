@@ -83,10 +83,12 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 					if (sscanf(line.c_str(),"%d", &geoname_id)==1) {
 						char buf[256];
 						string skey  = get_csv_field(line.c_str(), buf,256, 4);
-						if (skey.empty()) {
-							string skey  = get_csv_field(line.c_str(), buf,256, 2);
-						}
 						string slabel  = get_csv_field(line.c_str(), buf,256, 5);
+						if (skey.empty()) {
+							// 6255147,en,AS,Asia,,,0 
+							skey  = get_csv_field(line.c_str(), buf,256, 2);
+							slabel  = get_csv_field(line.c_str(), buf,256, 3);
+						}
 
 						return std::make_tuple(true, geoname_id,  skey, slabel );
 					} else {
