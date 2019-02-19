@@ -33,6 +33,8 @@ public:
 	bool  			 LookupFull(const char * dotted, const char ** ppkey, const char **pplabel);
 	bool		 	 LookupFull(uint32_t  ip, const char **ppkey, const char **pplabel);
 
+	void			shrink_to_fit();
+
 private:
 	ptreearray_node_4_t  	sproot;
 	geonames_t 				mpGeonames;

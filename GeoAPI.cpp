@@ -179,6 +179,8 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 			}
 		);
 
+		pdb->shrink_to_fit();
+
 		return (void *) pdb;
 	}
 	else 

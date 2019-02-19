@@ -18,6 +18,11 @@ CGeoDB::~CGeoDB()
 
 }
 
+void			CGeoDB::shrink_to_fit()
+{
+	sproot.shrink_to_fit();
+}
+
 int				 CGeoDB::LookupGeoname(const char * dotted)
 {
 	return sproot.longest_match(dotted);

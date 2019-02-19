@@ -19,6 +19,9 @@ int main(int c, char ** v)
 	GeoIP * pdb = GeoIP_open( v[1], 0 );
 	runtest(pdb);
 
+int i;
+cin >> i;
+
 	GeoIP_delete(pdb);
 
 }

@@ -1,6 +1,6 @@
 CC      = g++
 CFLAGS  = -g -std=c++11 -fPIC -O2
-LDFLAGS = -lpthread 
+LDFLAGS = -lpthread   
 PREFIX = /usr/local
 
 all: testapi 
