@@ -1,3 +1,4 @@
+#include "GeoAPI.h"
 #include "GeoDB.h"
 #include <string>
 #include <tuple>
