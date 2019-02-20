@@ -134,20 +134,11 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 	}
 	else if (pathstr.find( "GeoLite2-ASN__PREFIXES__-Blocks-IPv4.csv") != string::npos) 
 	{
-		// Loads the prefixes from ASN database rather than the AS-Name 
-		string namesdb(pathstr);
-		string toSearch("__PREFIXES__");
-
-		// Get the first occurrence
-		auto pos = namesdb.find(toSearch);
-		namesdb.replace(pos, toSearch.size(), string(""));
-			 
-			 
 		// asn db
 		auto pdb = new CGeoDB();
 
 		// load the blocks  cidr->geoid 
-		pdb->LoadBlocks( namesdb, 
+		pdb->LoadBlocks( pathstr, 
 			[](int line_no, const string& line)->subnet_geoid_t {
 				int a,b,c,d,e;
 				if (sscanf(line.c_str(),"%d.%d.%d.%d/%d", &a,&b,&c,&d,&e)==5) {
