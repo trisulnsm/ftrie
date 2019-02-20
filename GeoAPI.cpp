@@ -132,7 +132,7 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 		return pdb;
 
 	}
-	else if (pathstr.find( "GeoLite2-ASN__PREFIXES__-Blocks-IPv4.csv") != string::npos) 
+	else if (pathstr.find( "GeoLite2-Prefixes-Blocks-IPv4.csv") != string::npos) 
 	{
 		// asn db
 		auto pdb = new CGeoDB();
