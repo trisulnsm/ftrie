@@ -132,6 +132,44 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 		return pdb;
 
 	}
+	else if (pathstr.find( "GeoLite2-ASN__PREFIXES__-Blocks-IPv4.csv") != string::npos) 
+	{
+		// Loads the prefixes from ASN database rather than the AS-Name 
+		string namesdb(pathstr);
+		string toSearch("__PREFIXES__");
+
+		// Get the first occurrence
+		auto pos = namesdb.find(toSearch);
+		namesdb.replace(pos, toSearch.size(), string(""));
+			 
+			 
+		// asn db
+		auto pdb = new CGeoDB();
+
+		// load the blocks  cidr->geoid 
+		pdb->LoadBlocks( namesdb, 
+			[](int line_no, const string& line)->subnet_geoid_t {
+				int a,b,c,d,e;
+				if (sscanf(line.c_str(),"%d.%d.%d.%d/%d", &a,&b,&c,&d,&e)==5) {
+					uint32_t addr = (a<<24) | (b << 16) | (c << 8)  | d ;
+					return std::make_tuple(true, addr, e, line_no);
+				} else {
+					return std::make_tuple(false, 0, 0, 0);
+				}
+			},
+			[](int line_no, const string& line)->geoid_desc_t {
+				int a,b,c,d,e;
+				if (sscanf(line.c_str(),"%d.%d.%d.%d/%d", &a,&b,&c,&d,&e)==5) {
+					char buf[256];
+					string skey  = get_csv_field(line.c_str(), buf,256, 0);
+					return std::make_tuple(true, line_no,  skey, skey);
+				} else {
+					return std::make_tuple(false, 0, "", "");
+				}
+			}
+		);
+		return pdb;
+	}
 	else if (pathstr.find( "GeoLite2-City-Blocks-IPv4.csv") != string::npos) 
 	{
 		// city db
