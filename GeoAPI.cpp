@@ -1,4 +1,3 @@
-#include "NewMaxmindDB.h"
 #include "GeoDB.h"
 #include <string>
 #include <tuple>
