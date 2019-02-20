@@ -173,6 +173,9 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 						string scc    = get_csv_field(line.c_str(), buf,256, 4);
 						string sst    = get_csv_field(line.c_str(), buf,256, 6);
 						string scity  = get_csv_field(line.c_str(), buf,256, 10);
+						if (scc.empty()) {
+							scc    = get_csv_field(line.c_str(), buf,256, 2);
+						}
 
 						return std::make_tuple(true, geoname_id,  to_string(geoname_id), scc +"/"+sst+"/"+scity );
 				} else {
