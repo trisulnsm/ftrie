@@ -74,16 +74,21 @@ void runtest(GeoIP * pdb)
 	std::default_random_engine e1(r());
 	std::uniform_int_distribution<uint32_t> uniform_dist(0, 0xFFFFFFFF);
 	auto start = chrono::steady_clock::now();
+	int ok=0,fail=0;
 	for (size_t i =0; i < 10000000; i ++) 
 	{
 		uint32_t ipnum  = uniform_dist(e1);
 		const char * k, * l;
 		if (GeoIP_by_ipnum(pdb, ipnum, &k, &l) ) {
+			++ok;
+		} else {
+			++fail;
 		}
 	}
 	auto end  = chrono::steady_clock::now();
 	auto ms   = chrono::duration <double, milli> (end-start).count() ;
 
 	cout << "Finished 10M lookups in " << ms << " milliseconds" << "  at rate " << (double) 1e+10/(ms/1000) << " per second" << endl;
+	cout << "lookup ok = " << ok << " , notfound = " << fail << endl;
 
 }
