@@ -18,9 +18,9 @@ CGeoDB::~CGeoDB()
 
 }
 
-void			CGeoDB::shrink_to_fit()
+void			CGeoDB::collapse_leaves()
 {
-	sproot.shrink_to_fit();
+	sproot.collapse_leaves();
 }
 
 int				 CGeoDB::LookupGeoname(const char * dotted)

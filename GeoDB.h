@@ -33,7 +33,7 @@ public:
 	bool  			 LookupFull(const char * dotted, const char ** ppkey, const char **pplabel);
 	bool		 	 LookupFull(uint32_t  ip, const char **ppkey, const char **pplabel);
 
-	void			shrink_to_fit();
+	void			collapse_leaves();
 
 private:
 	ptreearray_node_4_t  	sproot;

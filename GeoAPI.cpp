@@ -129,6 +129,7 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 			}
 		);
 
+		pdb->collapse_leaves();
 		return pdb;
 
 	}
@@ -159,6 +160,7 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 				}
 			}
 		);
+		pdb->collapse_leaves();
 		return pdb;
 	}
 	else if (pathstr.find( "GeoLite2-City-Blocks-IPv4.csv") != string::npos) 
@@ -213,12 +215,13 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 			}
 		);
 
-		pdb->shrink_to_fit();
+		pdb->collapse_leaves();
 
 		return (void *) pdb;
 	}
 	else 
 	{
+		fprintf(stderr,"database name must contain GeoLite2-City-Blocks/ASN-Blocks/Country-Blocks\n");
 		return nullptr;
 	}
 }

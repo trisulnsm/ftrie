@@ -10,6 +10,7 @@
 using namespace std;
 
 void runtest(GeoIP * pdb);
+void runbenchmark(GeoIP * pdb);
 
 int main(int c, char ** v)
 {
@@ -49,6 +50,7 @@ void runtest(GeoIP * pdb)
 		"192.169.0.0",
 		"192.168.255.255",
 		"141.226.77.207",
+		"194.14.216.22",
 		"1.0.15.255",
 		"1.0.15.255",
 		"1.0.16.0",
@@ -68,6 +70,11 @@ void runtest(GeoIP * pdb)
 			}
 		}
 	}
+
+}
+
+void	runbenchmark(GeoIP * pdb) 
+{
 
 	// 10 M random lookup performance
 	std::random_device r;
