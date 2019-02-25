@@ -62,8 +62,8 @@ That is a blazing **5.15M totally random lookups/second**  !!
 This library was written to overcome the slow and cumbersome new API from GeoLite2 
 
 Here are the numbers for the libmaxmind API. Note we are not even accessing the 
-fields, just stopping at 'getentrydatalist(..)` and also used `sockaddr` API to 
-prevent conversion of dotted decimal string to a 32bit IP number.
+fields, just stopping at `getentrydatalist(..)` and also used the `sockaddr` API to 
+eliminate the performance impact of  conversion of dotted decimal string to a 32bit IP number.
 
 ````
 vivek@viveku14:~/ftrie$ g++  testmmdb.cpp   -lmaxminddb -O2 -o testmmdb -std=c++11
