@@ -57,6 +57,28 @@ That is a blazing **5.15M totally random lookups/second**  !!
 
 
 
+### Comparison with  libmaxminddb
+
+This library was written to overcome the slow and cumbersome new API from GeoLite2 
+
+Here are the numbers for the libmaxmind API. Note we are not even accessing the 
+fields, just stopping at 'getentrydatalist(..)` and also used `sockaddr` API to 
+prevent conversion of dotted decimal string to a 32bit IP number.
+
+````
+vivek@viveku14:~/ftrie$ g++  testmmdb.cpp   -lmaxminddb -O2 -o testmmdb -std=c++11
+vivek@viveku14:~/ftrie$ ./testmmdb /tmp/GeoLite2-City.mmdb 
+Finished 10M lookups in 25295.8 milliseconds  at rate 3.95323e+08 per second
+````
+
+So we have a *12X improvement* !!  
+
+There is however a small memory tradeoff. 
+ - The libmaxminddb  uses 75MB for the CITY database, 
+ - This libftrie uses 206MB for the CITY database
+
 ## TODO 
 
 Support IPv6 
+Reduce memory use further 
+
