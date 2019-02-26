@@ -9,6 +9,7 @@ Currently supports the [Maxmind GeoLite2 CSV databases](https://dev.maxmind.com/
 
 To install this library follow the usual process. The API file is installed in `/usr/local/include/GeoAPI.h`
 
+
 ```
 make  && make install
 link your app with -lftrie 
@@ -34,6 +35,11 @@ The API features a  single call `GeoIP_by_ipnum()`  that returns a _Key_  and a 
 	GeoIP_delete(pdb);
 
 ````
+
+#### GeoIP_open()  filename usage note
+
+The filename passed to `GeoIP_open()` determines the type of CSV file. Currently ftrie supports the Maxmind GeoLite2 CSV files, hence the filenames must match those names.
+
 
 
 ## Benchmark
