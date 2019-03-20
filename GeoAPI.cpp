@@ -241,7 +241,6 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 				string k = line.substr(spos+1);
 
 				char buf[256];
-				string aspath   = get_csv_field(k.c_str(), buf,256, 0);
 				string ipa      = get_csv_field(k.c_str(), buf,256, 1);
 				string cidr     = get_csv_field(k.c_str(), buf,256, 2);
 
@@ -264,7 +263,10 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 
 				char buf[256];
 				string aspath   = get_csv_field(k.c_str(), buf,256, 0);
-				return std::make_tuple(true, line_no,  aspath, aspath);
+				string ipa      = get_csv_field(k.c_str(), buf,256, 1);
+				string cidr     = get_csv_field(k.c_str(), buf,256, 2);
+
+				return std::make_tuple(true, line_no,  aspath.append(" ").append(ipa).append("/").append(cidr) , "");
 			}
 		);
 		pdb->collapse_leaves();
