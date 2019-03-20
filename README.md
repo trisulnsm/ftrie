@@ -1,4 +1,7 @@
 # ftrie
+
+> UPDATE 20-MAR-2019 :   Can now read aspath dumps from BGP 
+
 Library to lookup IPv4 address with focus on speed. See _ftrie.h_ for the backing datastructure - a modified version of a RADIX Trie 
 
 Currently supports the [Maxmind GeoLite2 CSV databases](https://dev.maxmind.com/geoip/geoip2/geolite2/). You can support any other CSV database by supplying the custom CSV parsing code in _GeoAPI.cpp_

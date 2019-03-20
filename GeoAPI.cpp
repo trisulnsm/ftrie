@@ -6,7 +6,7 @@
 
 using namespace std;
 
-static const char * get_csv_field(const char * str, char * bufout, size_t bufsize, int tokenid)
+static const char * get_csv_field(const char * str, char * bufout, size_t bufsize, int tokenid, char delim=',')
 {
 
 	const char * pptr = str;
@@ -21,7 +21,7 @@ static const char * get_csv_field(const char * str, char * bufout, size_t bufsiz
 			pptr_end  = strchrnul(pptr,'"');
 			inc=2;
 		} else {
-			pptr_end  = strchrnul(pptr,',');
+			pptr_end  = strchrnul(pptr,delim);
 			inc=1;
 		}
 		if( tokenid==idx) {
@@ -218,6 +218,57 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 		pdb->collapse_leaves();
 
 		return (void *) pdb;
+	}
+	else if (pathstr.find( "aspath") != string::npos) 
+	{
+		//16.0.1		IN TXT	"34224 3356 174 2519" "1.0.16.0" "24"
+		auto pdb = new CGeoDB();
+
+		// load the blocks  cidr->geoid 
+		pdb->LoadBlocks( pathstr, 
+			[](int line_no, const string& line)->subnet_geoid_t {
+
+				// over * lines 
+				if (line.find("*") != string::npos) {
+					return std::make_tuple(false, 0, 0, 0);
+				}
+
+				int spos=0;
+				for (int i=0;i<3;i++) {
+					spos= line.find('\t',spos+1);
+				}
+
+				string k = line.substr(spos+1);
+
+				char buf[256];
+				string aspath   = get_csv_field(k.c_str(), buf,256, 0);
+				string ipa      = get_csv_field(k.c_str(), buf,256, 1);
+				string cidr     = get_csv_field(k.c_str(), buf,256, 2);
+
+				int a,b,c,d,e;
+				if (sscanf(ipa.c_str(),"%d.%d.%d.%d", &a,&b,&c,&d)==4) {
+					uint32_t addr = (a<<24) | (b << 16) | (c << 8)  | d ;
+					return std::make_tuple(true, addr, stoi(cidr), line_no);
+				} else {
+					return std::make_tuple(false, 0, 0, 0);
+				}
+			},
+			[](int line_no, const string& line)->geoid_desc_t {
+
+				int spos=0;
+				for (int i=0;i<3;i++) {
+					spos= line.find('\t',spos+1);
+				}
+
+				string k = line.substr(spos+1);
+
+				char buf[256];
+				string aspath   = get_csv_field(k.c_str(), buf,256, 0);
+				return std::make_tuple(true, line_no,  aspath, aspath);
+			}
+		);
+		pdb->collapse_leaves();
+		return pdb;
 	}
 	else 
 	{
