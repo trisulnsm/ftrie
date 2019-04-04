@@ -36,6 +36,8 @@ int main(int c, char ** v)
 void runtest(GeoIP * pdb) 
 {
 	vector<string>  testips{
+		"61.95.168.122",
+		"118.185.188.11",
 		"95.101.2.25",
 		"65.54.239.80",
 		"111.201.128.153",
