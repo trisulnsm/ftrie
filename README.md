@@ -44,6 +44,10 @@ The API features a  single call `GeoIP_by_ipnum()`  that returns a _Key_  and a 
 The filename passed to `GeoIP_open()` determines the type of CSV file. Currently ftrie supports the Maxmind GeoLite2 CSV files, hence the filenames must match those names.
 
 
+### Shared library 
+
+Use the target libftrie.so `make libftrie.so` 
+
 
 ## Benchmark
 
