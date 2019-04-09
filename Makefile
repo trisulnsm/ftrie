@@ -6,7 +6,7 @@ PREFIX = /usr/local
 all: testapi 
 
 libftrie.so: ftrie.o  GeoAPI.o  GeoDB.o
-	g++ -shared -o $@  $< 
+	g++ -shared -o $@   ftrie.o GeoAPI.o GeoDB.o 
 
 libftrie.a: ftrie.o  GeoAPI.o  GeoDB.o
 	ar rcs $@ ftrie.o GeoAPI.o  GeoDB.o
@@ -20,7 +20,7 @@ testapi: testapi.o  libftrie.a
 .PHONY: clean 
 
 clean:
-	rm -f *.o *.a  testapi
+	rm -f *.o *.a  testapi testmmdb libftrie.so  a.out
 
 
 .PHONY: install

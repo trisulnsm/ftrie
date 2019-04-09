@@ -3,8 +3,44 @@
 #include <string>
 #include <tuple>
 #include <string.h>
+#include <arpa/inet.h>
 
 using namespace std;
+
+	static const char * AsciiHex = 
+	"\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0"
+	"\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0"
+	"\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0"
+	"\x0\x1\x2\x3\x4\x5\x6\x7\x8\x9\x0\x0\x0\x0\x0\x0"
+	"\x0\xa\xb\xc\xd\xe\xf\x0\x0\x0\x0\x0\x0\x0\x0\x0"
+	"\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0"
+	"\x0\xa\xb\xc\xd\xe\xf\x0\x0\x0\x0\x0\x0\x0\x0\x0"
+	"\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0";
+
+	// n1 and n2 are Nibble
+	static inline uint8_t    Hex2Byte(char n1, char n2)
+	{
+		uint8_t b1 =  AsciiHex[ n1&0x7f];
+		uint8_t b2 =  AsciiHex[ n2&0x7f];
+
+		return (b1<<4)|b2;
+	}
+	// Trisul key to ipnum  for v4
+	// Trisul key format for v4 : C0.A8.01.02
+	static inline uint32_t IP4_to_number(const char  * pszString )
+	{
+		const char * pptr = pszString;
+		union{
+			uint8_t  b[4];
+			uint32_t dw;
+		};
+
+		b[0]=Hex2Byte(pptr[0],pptr[1]);
+		b[1]=Hex2Byte(pptr[3],pptr[4]);
+		b[2]=Hex2Byte(pptr[6],pptr[7]);
+		b[3]=Hex2Byte(pptr[9],pptr[10]);
+		return htonl(dw);
+	}
 
 static const char * get_csv_field(const char * str, char * bufout, size_t bufsize, int tokenid, char delim=',')
 {
@@ -289,8 +325,20 @@ void			GeoIP_delete(GeoIP * pdb)
 
 bool GeoIP_by_ipnum(GeoIP * GeoIP_Handle, uint32_t ipnum, const char ** key, const char ** label)
 {
+printf("0x%8X\n", ipnum);
 	CGeoDB  * pdb = (CGeoDB *) GeoIP_Handle;
 	return pdb->LookupFull(ipnum, key,label);
 }
 
 
+bool GeoIP_by_key(GeoIP * GeoIP_Handle, const char * ipkey, const char ** key, const char ** label)
+{
+	return GeoIP_by_ipnum( GeoIP_Handle, IP4_to_number(ipkey), key, label);
+
+}
+bool GeoIP_by_ipaddr(GeoIP * GeoIP_Handle, const char * dotted, const char ** key, const char ** label)
+{
+	CGeoDB  * pdb = (CGeoDB *) GeoIP_Handle;
+	return pdb->LookupFull(dotted, key,label);
+
+}

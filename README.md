@@ -1,5 +1,6 @@
 # ftrie
 
+> UPDATE 9-APR-2019 :   Added a LuaJIT FFI wrapper ftrie.lua 
 > UPDATE 20-MAR-2019 :   Can now read aspath dumps from BGP 
 
 Library to lookup IPv4 address with focus on speed. See _ftrie.h_ for the backing datastructure - a modified version of a RADIX Trie 
@@ -18,7 +19,25 @@ make  && make install
 link your app with -lftrie 
 ```
 
-The API features a  single call `GeoIP_by_ipnum()`  that returns a _Key_  and a _Label_  for a 32-Bit ip number. The _Key_ is a short string such as Country Code "US/UK/IN" and _Label_ is the expanded version such as "United States". You can roll higher level primitives on top of this basic API. 
+#### LUA and shared library 
+To build a shared library, do `make clean && make libftrie.so` 
+
+You can also find a LuaJIT FFI ftrie.lua and a test_ftrie.lua 
+
+```lua
+vivek@viveku14:~/ft00/ftrie$ luajit test_ftrie.lua 
+testing dotted
+10796   Charter Communications Inc
+testing trisulkey
+0x4A3E4848
+10796   Charter Communications Inc
+
+```
+
+
+### API calls 
+
+The API features  `GeoIP_by_ipnum()`  that returns a _Key_  and a _Label_  for a 32-Bit ip number. The _Key_ is a short string such as Country Code "US/UK/IN" and _Label_ is the expanded version such as "United States".  See GeoAPI.h for looking up by ip address and trisul key format.
 
 ````
 

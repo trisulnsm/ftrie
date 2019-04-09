@@ -1,0 +1,12 @@
+network,autonomous_system_number,autonomous_system_organization
+1.0.0.0/24,13335,"Cloudflare, Inc."
+74.62.64.0/22,11427,"Charter Communications Inc"
+74.62.68.0/22,10796,"Charter Communications Inc"
+74.62.72.0/22,10796,"Charter Communications Inc"
+142.169.240.0/21,852,"TELUS Communications Inc."
+142.169.248.0/22,852,"TELUS Communications Inc."
+194.14.211.0/24,8928,"Interoute Communications Limited"
+194.14.216.0/24,1257,TELE2
+194.14.217.0/24,5541,"INVITE Systems SRL"
+212.191.64.0/19,8256,"Technical University of Lodz Computer Centre"
+212.191.96.0/20,8256,"Technical University of Lodz Computer Centre"
