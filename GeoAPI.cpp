@@ -325,7 +325,6 @@ void			GeoIP_delete(GeoIP * pdb)
 
 bool GeoIP_by_ipnum(GeoIP * GeoIP_Handle, uint32_t ipnum, const char ** key, const char ** label)
 {
-printf("0x%8X\n", ipnum);
 	CGeoDB  * pdb = (CGeoDB *) GeoIP_Handle;
 	return pdb->LookupFull(ipnum, key,label);
 }
