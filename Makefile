@@ -1,15 +1,15 @@
 CC      = g++
-CFLAGS  = -g -std=c++11 -fPIC -O2
+CFLAGS  = -g -std=c++11 -fPIC -O0
 LDFLAGS = -lpthread 
 PREFIX = /usr/local
 
 all: testapi 
 
-libftrie.so: ftrie.o  GeoAPI.o  GeoDB.o
-	g++ -shared -o $@   ftrie.o GeoAPI.o GeoDB.o 
+libftrie.so: ftrie.o  GeoAPI.o  GeoDB.o StrTokenizer.o
+	g++ -shared -o $@   ftrie.o GeoAPI.o GeoDB.o  StrTokenizer.o
 
-libftrie.a: ftrie.o  GeoAPI.o  GeoDB.o
-	ar rcs $@ ftrie.o GeoAPI.o  GeoDB.o
+libftrie.a: ftrie.o  GeoAPI.o  GeoDB.o StrTokenizer.o
+	ar rcs $@ ftrie.o GeoAPI.o  GeoDB.o StrTokenizer.o
 
 testapi: testapi.o  libftrie.a
 	$(CC) -o $@ $^ $(LDFLAGS)

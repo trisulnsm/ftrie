@@ -3,7 +3,9 @@
 #include <string>
 #include <tuple>
 #include <string.h>
+#include <sstream>
 #include <arpa/inet.h>
+#include "StrTokenizer.h"
 
 using namespace std;
 
@@ -303,6 +305,59 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 				string cidr     = get_csv_field(k.c_str(), buf,256, 2);
 
 				return std::make_tuple(true, line_no,  aspath.append(" ").append(ipa).append("/").append(cidr) , "");
+			}
+		);
+		pdb->collapse_leaves();
+		return pdb;
+	}
+	else if (pathstr.find( "pir-as-path") != string::npos) 
+	{
+		// 2019-04-22 13:38:16.067 prefix announce 1.11.230.0/24 origin IGP aspath 9498 6939 4766 38091 38091 38091 38091 38091 38091 17839
+		auto pdb = new CGeoDB();
+
+		// load the blocks  cidr->geoid 
+		pdb->LoadBlocks( pathstr, 
+			[](int line_no, const string& line)->subnet_geoid_t {
+
+				// over * lines 
+				if (line.find("*") != string::npos) {
+					return std::make_tuple(false, 0, 0, 0);
+				}
+
+				// must have prefix announcement 
+				if (line.find("announce") == string::npos) {
+					return std::make_tuple(false, 0, 0, 0);
+				}
+
+				StrTokenizer Tok( line.c_str(), " ");
+				if (Tok.GetCount() < 9) {
+					return std::make_tuple(false, 0, 0, 0);
+				}
+
+				int a,b,c,d,e;
+				if (sscanf(Tok.GetToken(4) ,"%d.%d.%d.%d/%d", &a,&b,&c,&d,&e)==5) {
+					uint32_t addr = (a<<24) | (b << 16) | (c << 8)  | d ;
+					return std::make_tuple(true, addr, e, line_no);
+				} else {
+					return std::make_tuple(false, 0, 0, 0);
+				}
+			},
+			[](int line_no, const string& line)->geoid_desc_t {
+
+				StrTokenizer Tok( line.c_str(), " ");
+				if (Tok.GetCount() < 9) {
+					return std::make_tuple(false, 0, "", "");
+				}
+
+				std::ostringstream oss;
+				string ipa      = Tok.GetToken(4);
+
+				for (int i=8; i< Tok.GetCount(); i++) {
+					oss << Tok.GetToken(i) << " ";
+				}
+
+				oss << Tok.GetToken(4);
+				return std::make_tuple(true, line_no,  oss.str()  , "");
 			}
 		);
 		pdb->collapse_leaves();
