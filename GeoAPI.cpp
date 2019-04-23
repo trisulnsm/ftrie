@@ -257,7 +257,7 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 
 		return (void *) pdb;
 	}
-	else if (pathstr.find( "aspath") != string::npos) 
+	else if (pathstr.find( "routeviews-aspath") != string::npos) 
 	{
 		//16.0.1		IN TXT	"34224 3356 174 2519" "1.0.16.0" "24"
 		auto pdb = new CGeoDB();
@@ -310,7 +310,7 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 		pdb->collapse_leaves();
 		return pdb;
 	}
-	else if (pathstr.find( "pir-as-path") != string::npos) 
+	else if (pathstr.find( "piranha-aspath") != string::npos) 
 	{
 		// 2019-04-22 13:38:16.067 prefix announce 1.11.230.0/24 origin IGP aspath 9498 6939 4766 38091 38091 38091 38091 38091 38091 17839
 		auto pdb = new CGeoDB();

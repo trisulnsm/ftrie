@@ -1,7 +1,7 @@
 # ftrie
 
 > UPDATE 9-APR-2019 :   Added a LuaJIT FFI wrapper ftrie.lua 
-> UPDATE 20-MAR-2019 :   Can now read aspath dumps from BGP 
+> UPDATE 20-MAR-2019 :   Can now read aspath dumps from quagga
 
 Library to lookup IPv4 address with focus on speed. See _ftrie.h_ for the backing datastructure - a modified version of a RADIX Trie 
 
