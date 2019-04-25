@@ -40,7 +40,7 @@ public:
 private:
 	ptreearray_node_4_t  	sproot;
 	geonames_t 				mpGeonames;
-	size_t					nprefixes;
+	size_t					nprefixes=0;
 	int						zero_dot_zero=-1;
 
 };

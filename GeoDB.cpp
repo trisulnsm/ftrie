@@ -11,6 +11,8 @@
 
 
 CGeoDB::CGeoDB()
+: nprefixes(0),
+  zero_dot_zero(-1)
 {
 }
 CGeoDB::~CGeoDB()
