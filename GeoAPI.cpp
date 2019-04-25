@@ -396,7 +396,7 @@ bool GeoIP_by_ipaddr(GeoIP * GeoIP_Handle, const char * dotted, const char ** ke
 	return pdb->LookupFull(dotted, key,label);
 
 }
-int 			size(GeoIP * GeoIP_Handle)
+int 			GeoIP_size(GeoIP * GeoIP_Handle)
 {
 	CGeoDB  * pdb = (CGeoDB *) GeoIP_Handle;
 	return pdb->size();

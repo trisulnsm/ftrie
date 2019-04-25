@@ -12,4 +12,4 @@ bool 		    GeoIP_by_key(GeoIP * GeoIP_Handle, const char * ipkey, const char ** 
 bool 		    GeoIP_by_ipaddr(GeoIP * GeoIP_Handle, const char * dotted, const char ** key, const char ** label);
 }
 
-int			size(GeoIP * GeoIP_Handle);
+int				GeoIP_size(GeoIP * GeoIP_Handle);
