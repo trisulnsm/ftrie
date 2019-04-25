@@ -1,5 +1,5 @@
 CC      = g++
-CFLAGS  = -g -std=c++11 -fPIC -O0
+CFLAGS  = -g -std=c++11 -fPIC -O2
 LDFLAGS = -lpthread 
 PREFIX = /usr/local
 

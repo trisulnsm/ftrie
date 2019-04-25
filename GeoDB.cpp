@@ -38,7 +38,7 @@ int				 CGeoDB::LookupGeoname(uint32_t dwip)
 bool 	CGeoDB::LookupFull(const char * dotted, const char **ppkey, const char **pplabel)
 {
 	uint32_t val = sproot.longest_match(dotted);
-	if (val != 0xfffffffff ) {
+	if (val != 0xffffffff ) {
 		geonames_t::iterator it = mpGeonames.find(geonames_t::key_type(val));
 		if (it != mpGeonames.end()) {
 			const keylabel_t&  kl = it->second;
@@ -46,7 +46,15 @@ bool 	CGeoDB::LookupFull(const char * dotted, const char **ppkey, const char **p
 			*pplabel = kl.second.c_str();
 			return true;
 		}
-	} 
+	} else if (zero_dot_zero != -1) {
+		geonames_t::iterator it = mpGeonames.find(geonames_t::key_type(zero_dot_zero));
+		if (it != mpGeonames.end()) {
+			const keylabel_t&  kl = it->second;
+			*ppkey = kl.first.c_str(); 
+			*pplabel = kl.second.c_str();
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -55,7 +63,7 @@ bool 	CGeoDB::LookupFull(uint32_t dwip,  const char **ppkey, const char **pplabe
 	bits32_t b(dwip, 32 ) ;
 	auto iter=b.new_iterator();
 	uint32_t val= sproot.longest_match(iter, 0xffffffff);
-	if (val != 0xfffffffff ) {
+	if (val != 0xffffffff ) {
 		geonames_t::iterator it = mpGeonames.find(geonames_t::key_type(val));
 		if (it != mpGeonames.end()) {
 			const keylabel_t&  kl = it->second;
@@ -63,7 +71,15 @@ bool 	CGeoDB::LookupFull(uint32_t dwip,  const char **ppkey, const char **pplabe
 			*pplabel = kl.second.c_str();
 			return true;
 		}
-	} 
+	} else if (zero_dot_zero != -1) {
+		geonames_t::iterator it = mpGeonames.find(geonames_t::key_type(zero_dot_zero));
+		if (it != mpGeonames.end()) {
+			const keylabel_t&  kl = it->second;
+			*ppkey = kl.first.c_str(); 
+			*pplabel = kl.second.c_str();
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -86,8 +102,13 @@ bool 	 CGeoDB::LoadBlocks(const std::string&  csvfile,
 		auto  nets = f_geoid( line_no, line);
 		if (std::get<0>(nets)) {
 			bits32_t b(std::get<1>(nets), std::get<2>(nets) ) ;
-			auto iter=b.new_iterator();
-			sproot.insert(iter,std::get<3>(nets));
+			if (not b.iszero()) {
+				auto iter=b.new_iterator();
+				sproot.insert(iter,std::get<3>(nets));
+			} else {
+				zero_dot_zero=std::get<3>(nets);
+			}
+			++nprefixes;
 		}
 
 		auto names =  f_geodesc( line_no, line);

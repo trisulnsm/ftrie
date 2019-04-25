@@ -33,6 +33,10 @@ struct bits32_t {
 		iterator new_iterator() {
 			return iterator(*this);
 		}
+		bool iszero() const {
+			return kbitlength==0 and val==0;
+
+		}
 	
 private:
 	const	size_t				  kbitlength;

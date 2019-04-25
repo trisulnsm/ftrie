@@ -35,9 +35,13 @@ public:
 
 	void			collapse_leaves();
 
+	size_t			size() const { return nprefixes;}
+
 private:
 	ptreearray_node_4_t  	sproot;
 	geonames_t 				mpGeonames;
+	size_t					nprefixes;
+	int						zero_dot_zero=-1;
 
 };
 

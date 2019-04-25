@@ -15,7 +15,7 @@ void runbenchmark(GeoIP * pdb);
 int main(int c, char ** v)
 {
 	if (c != 2 ) {
-		throw std::domain_error("Usage : testoldapi   input-csv-blocks ");
+		throw std::domain_error("Usage : testapi   input-csv-blocks ");
 	}
 
 
