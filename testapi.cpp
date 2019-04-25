@@ -20,6 +20,8 @@ int main(int c, char ** v)
 
 
 	GeoIP * pdb = GeoIP_open( v[1], 0 );
+
+	cout << "loaded " << GeoIP_size(pdb) << " prefixes " << endl;
 	runtest(pdb);
 
 
