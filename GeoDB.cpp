@@ -147,3 +147,17 @@ bool			 CGeoDB::LoadNames(   const std::string& csvfile,
 	}
 	file.close();
 }
+
+bool			 CGeoDB::Push( int id, uint32_t prefix,  int mask , const std::string& key, const std::string& label )
+{
+	bits32_t b(prefix, mask ) ;
+	if (not b.iszero()) {
+		auto iter=b.new_iterator();
+		sproot.insert(iter,id);
+	} else {
+		zero_dot_zero=id;
+	}
+	++nprefixes;
+
+	mpGeonames.insert(geonames_t::value_type(id, make_pair(key,label)));
+}

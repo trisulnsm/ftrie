@@ -6,6 +6,7 @@
 #include <sstream>
 #include <arpa/inet.h>
 #include "StrTokenizer.h"
+#include "sqlite3.h"
 
 using namespace std;
 
@@ -360,6 +361,47 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 				return std::make_tuple(true, line_no,  oss.str()  , "");
 			}
 		);
+		pdb->collapse_leaves();
+		return pdb;
+	}
+	else if (pathstr.find( "sqlite3") != string::npos) 
+	{
+		// sqlite3 database 
+		auto pdb = new CGeoDB();
+
+		sqlite3       * pSQL3;
+		sqlite3_stmt  * pstmt;
+		int 			sqerr;
+
+		sqerr = sqlite3_open_v2( pathstr.c_str(), &pSQL3, SQLITE_OPEN_READONLY, NULL); 
+		if (sqerr != SQLITE_OK) {
+			return nullptr;
+		}
+
+		// iterate over blocks 
+		sqerr = sqlite3_prepare_v2( pSQL3,  
+					"SELECT ROWID, PREFIX, ASPATH FROM PREFIX_PATHS_V4 ",
+					-1, &pstmt, NULL);
+		if (sqerr != SQLITE_OK) {
+			return nullptr;
+		}
+
+		while ( (sqerr = sqlite3_step(pstmt)) == SQLITE_ROW) 
+		{
+			int64_t 	 blk   	  = sqlite3_column_int64( pstmt,0);
+			std::string  prefix   = (const char*) sqlite3_column_text( pstmt,1);
+			std::string  aspath   = (const char*) sqlite3_column_text( pstmt,2);
+
+			int a,b,c,d,e;
+			if (sscanf(prefix.c_str(),"%d.%d.%d.%d/%d", &a,&b,&c,&d,&e)==5) {
+				uint32_t addr = (a<<24) | (b << 16) | (c << 8)  | d ;
+				pdb->Push( blk,  addr, e, aspath, "");
+			}
+		}
+
+		sqlite3_finalize(pstmt);
+		sqlite3_close(pSQL3);
+
 		pdb->collapse_leaves();
 		return pdb;
 	}

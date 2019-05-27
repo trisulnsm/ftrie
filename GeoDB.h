@@ -37,6 +37,8 @@ public:
 
 	size_t			size() const { return nprefixes;}
 
+	bool			 Push( int id, uint32_t prefix,  int mask , const std::string& key, const std::string& label );
+
 private:
 	ptreearray_node_4_t  	sproot;
 	geonames_t 				mpGeonames;

@@ -1,6 +1,8 @@
+CCOMP   = gcc
 CC      = g++
 CFLAGS  = -g -std=c++11 -fPIC -O2
-LDFLAGS = -lpthread 
+CCOMPFLAGS  = -g -fPIC -O2
+LDFLAGS = -lpthread  -ldl
 PREFIX = /usr/local
 
 all: testapi 
@@ -8,14 +10,17 @@ all: testapi
 libftrie.so: ftrie.o  GeoAPI.o  GeoDB.o StrTokenizer.o
 	g++ -shared -o $@   ftrie.o GeoAPI.o GeoDB.o  StrTokenizer.o
 
-libftrie.a: ftrie.o  GeoAPI.o  GeoDB.o StrTokenizer.o
-	ar rcs $@ ftrie.o GeoAPI.o  GeoDB.o StrTokenizer.o
+libftrie.a: ftrie.o  GeoAPI.o  GeoDB.o StrTokenizer.o sqlite3.o 
+	ar rcs $@ ftrie.o GeoAPI.o  GeoDB.o StrTokenizer.o sqlite3.o 
 
 testapi: testapi.o  libftrie.a
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -o $@ -c $<
+
+sqlite3.o: sqlite3.c 
+	$(CCOMP) $(CCOMPFLAGS) -o $@ -c $<
 
 .PHONY: clean 
 
