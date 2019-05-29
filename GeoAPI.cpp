@@ -395,7 +395,7 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 			int a,b,c,d,e;
 			if (sscanf(prefix.c_str(),"%d.%d.%d.%d/%d", &a,&b,&c,&d,&e)==5) {
 				uint32_t addr = (a<<24) | (b << 16) | (c << 8)  | d ;
-				pdb->Push( blk,  addr, e, aspath, "");
+				pdb->Push( blk,  addr, e, aspath.append(" ").append(prefix), "");
 			}
 		}
 
