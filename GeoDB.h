@@ -19,11 +19,11 @@ public:
 	CGeoDB();
 	virtual ~CGeoDB();
 
-	bool			 LoadBlocks( const std::string  &csvfile,
+	void			 LoadBlocks( const std::string  &csvfile,
 								 std::function<subnet_geoid_t(int, const std::string& line)> f_geoid,
 							     std::function<geoid_desc_t(int, const std::string& line)> f_geodesc);
 
-	bool			 LoadNames(  const std::string& csvfile,  
+	void			 LoadNames(  const std::string& csvfile,  
 								 std::function<subnet_geoid_t(int, const std::string& line)> f_geoid,
 							     std::function<geoid_desc_t(int, const std::string& line)> f_geodesc);
 
@@ -37,7 +37,7 @@ public:
 
 	size_t			size() const { return nprefixes;}
 
-	bool			 Push( int id, uint32_t prefix,  int mask , const std::string& key, const std::string& label );
+	void			 Push( int id, uint32_t prefix,  int mask , const std::string& key, const std::string& label );
 
 private:
 	ptreearray_node_4_t  	sproot;

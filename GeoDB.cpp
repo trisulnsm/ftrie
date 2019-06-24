@@ -86,7 +86,7 @@ bool 	CGeoDB::LookupFull(uint32_t dwip,  const char **ppkey, const char **pplabe
 }
 
 // Load the blocks file 
-bool 	 CGeoDB::LoadBlocks(const std::string&  csvfile,
+void 	 CGeoDB::LoadBlocks(const std::string&  csvfile,
 							std::function<subnet_geoid_t(int, const std::string& line)> f_geoid,
 							std::function<geoid_desc_t(int, const std::string& line)> f_geodesc)
 {
@@ -125,7 +125,7 @@ bool 	 CGeoDB::LoadBlocks(const std::string&  csvfile,
 }
 
 // Load the meta data - the full mapping
-bool			 CGeoDB::LoadNames(   const std::string& csvfile,
+void			 CGeoDB::LoadNames(   const std::string& csvfile,
 									 std::function<subnet_geoid_t(int, const std::string& line)> f_geoid,
 							     	 std::function<geoid_desc_t(int, const std::string& line)> f_geodesc)
 {
@@ -148,7 +148,7 @@ bool			 CGeoDB::LoadNames(   const std::string& csvfile,
 	file.close();
 }
 
-bool			 CGeoDB::Push( int id, uint32_t prefix,  int mask , const std::string& key, const std::string& label )
+void			 CGeoDB::Push( int id, uint32_t prefix,  int mask , const std::string& key, const std::string& label )
 {
 	bits32_t b(prefix, mask ) ;
 	if (not b.iszero()) {
