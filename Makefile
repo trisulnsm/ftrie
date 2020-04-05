@@ -7,16 +7,16 @@ PREFIX = /usr/local
 
 all: testapi 
 
-libftrie.so: ftrie.o  GeoAPI.o  GeoDB.o StrTokenizer.o
-	g++ -shared -o $@   ftrie.o GeoAPI.o GeoDB.o  StrTokenizer.o
+libftrie.so: ftrie.o  GeoAPI.o  GeoDB.o StrTokenizer.o 
+	g++ -shared -o $@   ftrie.o GeoAPI.o GeoDB.o  StrTokenizer.o 
 
 libftrie.a: ftrie.o  GeoAPI.o  GeoDB.o StrTokenizer.o sqlite3.o 
-	ar rcs $@ ftrie.o GeoAPI.o  GeoDB.o StrTokenizer.o sqlite3.o 
+	ar rcs $@ ftrie.o GeoAPI.o  GeoDB.o StrTokenizer.o sqlite3.o
 
 testapi: testapi.o  libftrie.a
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-%.o: %.cpp
+%.o: %.cpp %.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 sqlite3.o: sqlite3.c 

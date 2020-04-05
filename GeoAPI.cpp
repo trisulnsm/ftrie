@@ -75,12 +75,24 @@ static const char * get_csv_field(const char * str, char * bufout, size_t bufsiz
 }
 
 
+GeoIP * 		GeoIP_new()
+{
+	CGeoDB * pnew = new CGeoDB;
+	return (void*) pnew;
+
+}
 GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
+{
+	return GeoIP_load(GeoIP_new(),path,flags);
+}
+GeoIP * 		GeoIP_load(GeoIP* pdb_opaque, const char * path, uint32_t flags)
 {
 	using keylabel_t = std::pair<string,string>;					
 	using geonames_t= unordered_map<int, keylabel_t >;						// geoid, <key,label>
 	using subnet_geoid_t=std::tuple<bool,uint32_t, uint8_t, int>;			// f_valid,netnum,mask,geoid
 	using geoid_desc_t  =std::tuple<bool,int, std::string,std::string>;		// f_valid,geoid,key,label
+
+	CGeoDB * pdb = (CGeoDB*) pdb_opaque;
 
 	std::string pathstr(path);
 	if (pathstr.find( "GeoLite2-Country-Blocks-IPv4.csv") != string::npos) 
@@ -93,7 +105,6 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 		auto pos = namesdb.find(toSearch);
 		namesdb.replace(pos, toSearch.size(), string("GeoLite2-Country-Locations-en.csv"));
 			 
-		auto pdb = new CGeoDB;
 
 		// load the blocks  cidr->geoid 
 		pdb->LoadBlocks( pathstr, 
@@ -140,9 +151,6 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 	}
 	else if (pathstr.find( "GeoLite2-ASN-Blocks-IPv4.csv") != string::npos) 
 	{
-		// asn db
-		auto pdb = new CGeoDB();
-
 		// load the blocks  cidr->geoid 
 		pdb->LoadBlocks( pathstr, 
 			[](int line_no, const string& line)->subnet_geoid_t {
@@ -174,9 +182,6 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 	}
 	else if (pathstr.find( "GeoLite2-Prefix-Blocks-IPv4.csv") != string::npos) 
 	{
-		// asn db
-		auto pdb = new CGeoDB();
-
 		// load the blocks  cidr->geoid 
 		pdb->LoadBlocks( pathstr, 
 			[](int line_no, const string& line)->subnet_geoid_t {
@@ -212,8 +217,6 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 		auto pos = namesdb.find(toSearch);
 		namesdb.replace(pos, toSearch.size(), string("GeoLite2-City-Locations-en.csv"));
 			 
-		auto pdb = new CGeoDB;
-
 		// load the blocks  cidr->geoid 
 		pdb->LoadBlocks( pathstr, 
 			[](int line_no, const string& line)->subnet_geoid_t {
@@ -261,7 +264,6 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 	else if (pathstr.find( "routeviews-aspath") != string::npos) 
 	{
 		//16.0.1		IN TXT	"34224 3356 174 2519" "1.0.16.0" "24"
-		auto pdb = new CGeoDB();
 
 		// load the blocks  cidr->geoid 
 		pdb->LoadBlocks( pathstr, 
@@ -314,7 +316,6 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 	else if (pathstr.find( "piranha-aspath") != string::npos) 
 	{
 		// 2019-04-22 13:38:16.067 prefix announce 1.11.230.0/24 origin IGP aspath 9498 6939 4766 38091 38091 38091 38091 38091 38091 17839
-		auto pdb = new CGeoDB();
 
 		// load the blocks  cidr->geoid 
 		pdb->LoadBlocks( pathstr, 
@@ -367,8 +368,6 @@ GeoIP * 		GeoIP_open(const char * path, uint32_t flags)
 	else if (pathstr.find( "sqlite3") != string::npos) 
 	{
 		// sqlite3 database 
-		auto pdb = new CGeoDB();
-
 		sqlite3       * pSQL3;
 		sqlite3_stmt  * pstmt;
 		int 			sqerr;
@@ -442,4 +441,21 @@ int 			GeoIP_size(GeoIP * GeoIP_Handle)
 {
 	CGeoDB  * pdb = (CGeoDB *) GeoIP_Handle;
 	return pdb->size();
+}
+bool 		    GeoIP_push_v4_str(GeoIP * GeoIP_Handle, const char * prefix, const char * key, const char *label)
+{
+	int a,b,c,d,e;
+	if (sscanf(prefix,"%d.%d.%d.%d/%d", &a,&b,&c,&d,&e)==5) {
+		uint32_t addr = (a<<24) | (b << 16) | (c << 8)  | d ;
+		return GeoIP_push_v4( GeoIP_Handle, addr,e,key,label);
+	} else {
+		return false;
+	}
+
+}
+bool 		    GeoIP_push_v4(GeoIP * GeoIP_Handle, uint32_t netnum, uint8_t mask, const char * key, const char *label)
+{
+	CGeoDB  * pdb = (CGeoDB *) GeoIP_Handle;
+	pdb->Push(pdb->size()+1, netnum, mask, key, label);
+	return true;
 }

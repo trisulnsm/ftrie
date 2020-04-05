@@ -33,9 +33,9 @@ public:
 	bool  			 LookupFull(const char * dotted, const char ** ppkey, const char **pplabel);
 	bool		 	 LookupFull(uint32_t  ip, const char **ppkey, const char **pplabel);
 
-	void			collapse_leaves();
+	void			 collapse_leaves();
 
-	size_t			size() const { return nprefixes;}
+	size_t			 size() const { return nprefixes;}
 
 	void			 Push( int id, uint32_t prefix,  int mask , const std::string& key, const std::string& label );
 

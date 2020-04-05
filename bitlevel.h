@@ -40,8 +40,11 @@ struct bitlevel_t
 		EMPTY_SLOT=0xFF,
 	};
 
-	bitlevel_t():pos(1<<Nbits,EMPTY_SLOT)
+	bitlevel_t()
 	{
+		for (int i=0;i< (1<<Nbits) ;i++) {
+			pos[i]=EMPTY_SLOT;
+		}
 	}
 
 	~bitlevel_t() 
@@ -67,10 +70,6 @@ struct bitlevel_t
 		} else {
 			vb[idx]->insert(iter,value);
 		}
-	}
-	bool	isemptyleaf()
-	{
-		return pos.empty();
 	}
 
 	bool  can_match(uint32_t bitval) 
@@ -144,7 +143,7 @@ struct bitlevel_t
 
 
 	std::bitset< 1 << Nbits >	 			data_leaves;
-	std::vector<uint8_t>		 			pos;
+	std::array<uint8_t, ( 1<<Nbits) >		pos;
 	std::vector<ptreearray_node_4_t*>	  	vb; 
 };
 
