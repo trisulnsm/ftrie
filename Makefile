@@ -16,6 +16,9 @@ libftrie.a: ftrie.o  GeoAPI.o  GeoDB.o StrTokenizer.o sqlite3.o
 testapi: testapi.o  libftrie.a
 	$(CC) -o $@ $^ $(LDFLAGS)
 
+%.o: %.cpp
+	$(CC) $(CFLAGS) -o $@ -c $<
+
 %.o: %.cpp %.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 
