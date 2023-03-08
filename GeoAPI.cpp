@@ -368,8 +368,8 @@ GeoIP * 		GeoIP_load(GeoIP* pdb_opaque, const char * path, uint32_t flags)
 	else if (pathstr.find( "sqlite3") != string::npos) 
 	{
 		// sqlite3 database 
-		sqlite3       * pSQL3;
-		sqlite3_stmt  * pstmt;
+		sqlite3       * pSQL3=nullptr;
+		sqlite3_stmt  * pstmt=nullptr;
 		int 			sqerr;
 
 		sqerr = sqlite3_open_v2( pathstr.c_str(), &pSQL3, SQLITE_OPEN_READONLY, NULL); 
@@ -382,6 +382,7 @@ GeoIP * 		GeoIP_load(GeoIP* pdb_opaque, const char * path, uint32_t flags)
 					"SELECT ROWID, PREFIX, ASPATH FROM PREFIX_PATHS_V4 ",
 					-1, &pstmt, NULL);
 		if (sqerr != SQLITE_OK) {
+			sqlite3_close(pSQL3);
 			return nullptr;
 		}
 
