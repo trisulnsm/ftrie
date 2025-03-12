@@ -28,6 +28,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <array> 
 #include <bitset>
 #include "ftrie.h"
 
